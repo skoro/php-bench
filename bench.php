@@ -80,6 +80,16 @@ function concat_val($carry, $item)
     return $carry . $item;
 }
 
+function generate_id($max = 10)
+{
+    static $choices = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $id = '';
+    while (strlen($id) < $max) {
+        $id .= $choices[mt_rand(0, 61)];
+    }
+    return $id;
+}
+
 $x = range(1, 500000);
 
 $profiler = Profiler::start('Array to value with array_reduce() and anon function');
@@ -118,4 +128,11 @@ foreach ($result as &$item) {
     $item *= 2;
 }
 echo $profiler;
+
+$profiler = Profiler::start('Id generator');
+for ($i = 0; $i < 50000; $i++) {
+    $id = generate_id();
+}
+echo $profiler;
+
 
